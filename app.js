@@ -1,6 +1,6 @@
 import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
 
-const MODEL_ID = 'Xenova/llama-3.2-1b-instruct-4bit';
+const MODEL_ID = 'Xenova/gorilla-openfunctions-v2';
 
 const inputEl = document.getElementById('input');
 const outputEl = document.getElementById('output');
@@ -54,24 +54,17 @@ async function initModel() {
 }
 
 function formatPrompt(userInput) {
-  return `<|begin_of_text|><|start_header_id|>system<|end_header_id|>
-You are Bob, a local AI assistant running in the browser. You can call tools using this exact format:
-<call_tool>function_name({"arg": "value"})</call_tool>
-
-Available tools:
-- get_crypto_price: Get crypto price. Args: {"symbol": "BTC"}
-- multiply_numbers: Multiply two numbers. Args: {"a": 5, "b": 10}
-
-Only call tools when needed. Respond normally for regular questions.
-<|eot_id|><|start_header_id|>user<|end_header_id|>
+  return `<|system|>
+You are Bob, a local AI assistant running in the browser. You have access to tools. Use them when needed.
+<|user|>
 ${userInput}
-<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+<|assistant|>
 `;
 }
 
 async function executeToolCalls(text) {
-  // Simple format: <call_tool>function_name({"arg": "val"})</call_tool>
-  const toolCallRegex = /<call_tool>(\w+)\((\{.*?\})\)<\/call_tool>/g;
+  // Gorilla format: {"name": "func", "arguments": {"arg": "val"}}
+  const toolCallRegex = /\{["\s]*name["\s]*:["\s]*(\w+)["\s]*,["\s]*arguments["\s]*:(\{.*?\})\}/g;
   let result = text;
   let match;
 
