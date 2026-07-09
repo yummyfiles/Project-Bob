@@ -1,6 +1,6 @@
 import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
 
-const MODEL_ID = 'yummyfiles/Bob';
+const MODEL_ID = 'Xenova/gorilla-openfunctions-v2';
 
 const inputEl = document.getElementById('input');
 const outputEl = document.getElementById('output');
@@ -54,8 +54,34 @@ async function initModel() {
 }
 
 function formatPrompt(userInput) {
+  const tools = [
+    {
+      name: "get_crypto_price",
+      description: "Get current price of a cryptocurrency",
+      parameters: {
+        type: "object",
+        properties: {
+          symbol: { type: "string", description: "Crypto symbol (e.g., BTC, ETH)" }
+        },
+        required: ["symbol"]
+      }
+    },
+    {
+      name: "multiply_numbers",
+      description: "Multiply two numbers together",
+      parameters: {
+        type: "object",
+        properties: {
+          a: { type: "number", description: "First number" },
+          b: { type: "number", description: "Second number" }
+        },
+        required: ["a", "b"]
+      }
+    }
+  ];
+
   return `<|system|>
-You are Bob, a local-first AI assistant running entirely in the user's browser via WebAssembly. No cloud, no tracking, no servers. You are concise, direct, and helpful. You can call tools using <call_tool> tags with format: <call_tool>function_name({arg1: "val", arg2: 123})</call_tool>
+You are Bob, a local-first AI assistant running in the browser. You have access to tools. Use them when needed.
 <|user|>
 ${userInput}
 <|assistant|>
@@ -63,42 +89,28 @@ ${userInput}
 }
 
 async function executeToolCalls(text) {
-  const toolCallRegex = /<call_tool>(.*?)<\/call_tool>/g;
+  // Gorilla format: {"name": "func", "arguments": {"arg": "val"}}
+  const toolCallRegex = /\{["\s]*name["\s]*:["\s]*(\w+)["\s]*,["\s]*arguments["\s]*:(\{.*?\})\}/g;
   let result = text;
   let match;
 
   while ((match = toolCallRegex.exec(text)) !== null) {
-    const callContent = match[1].trim();
-    const funcMatch = callContent.match(/^(\w+)\((.*)\)$/);
-    if (!funcMatch) continue;
-
-    const funcName = funcMatch[1];
-    const argsStr = funcMatch[2];
-
+    const funcName = match[1];
+    let args;
     try {
-      let args = {};
-      if (argsStr.trim()) {
-        const argPairs = argsStr.split(',').map(s => s.trim());
-        for (const pair of argPairs) {
-          const [key, val] = pair.split(':').map(s => s.trim());
-          if (key && val) {
-            let parsed = val;
-            if (val.startsWith('"') && val.endsWith('"')) parsed = val.slice(1, -1);
-            else if (!isNaN(val)) parsed = Number(val);
-            else if (val === 'true') parsed = true;
-            else if (val === 'false') parsed = false;
-            args[key] = parsed;
-          }
-        }
-      }
+      args = JSON.parse(match[2]);
+    } catch {
+      continue;
+    }
 
-      if (customTools[funcName]) {
+    if (customTools[funcName]) {
+      try {
         const toolResult = await customTools[funcName](...Object.values(args));
         const resultStr = String(toolResult);
         result = result.replace(match[0], `[TOOL RESULT: ${funcName} => ${resultStr}]`);
+      } catch (err) {
+        result = result.replace(match[0], `[TOOL ERROR: ${err.message}]`);
       }
-    } catch (err) {
-      result = result.replace(match[0], `[TOOL ERROR: ${err.message}]`);
     }
   }
 
@@ -114,8 +126,8 @@ async function runInference(prompt) {
 
   try {
     const output = await generator(formatted, {
-      max_new_tokens: 256,
-      temperature: 0.7,
+      max_new_tokens: 512,
+      temperature: 0.1,
       top_p: 0.9,
       do_sample: true,
       return_full_text: false
