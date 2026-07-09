@@ -41,7 +41,15 @@ def deploy_github():
     else:
         run_cmd(f"git remote set-url origin {GITHUB_REPO}")
     run_cmd("git add index.html app.js dataset.jsonl colab_training_notebook.py push_assets.py")
-    run_cmd(f'git commit -m "{COMMIT_MSG}"')
+    commit_result = subprocess.run(f'git commit -m "{COMMIT_MSG}"', shell=True, cwd=REPO_ROOT, capture_output=True, text=True)
+    if commit_result.returncode != 0:
+        if "nothing to commit" in commit_result.stdout:
+            print("No changes to commit.")
+        else:
+            print(commit_result.stderr.strip(), file=sys.stderr)
+            raise subprocess.CalledProcessError(commit_result.returncode, f'git commit -m "{COMMIT_MSG}"', commit_result.stdout, commit_result.stderr)
+    else:
+        print(commit_result.stdout.strip())
     try:
         run_cmd("git push --force origin main")
         print("GitHub deployment complete.")
