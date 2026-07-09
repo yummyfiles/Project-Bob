@@ -1,6 +1,6 @@
 import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
 
-const MODEL_ID = 'Xenova/Phi-3-mini-4k-instruct-4bit';
+const MODEL_ID = 'Xenova/llama-3.2-1b-instruct-4bit';
 
 const inputEl = document.getElementById('input');
 const outputEl = document.getElementById('output');
