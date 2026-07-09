@@ -11,7 +11,7 @@ except ImportError:
 
 
 REPO_ROOT = Path(__file__).parent.resolve()
-GITHUB_REPO = "https://github.com/yummyfiles/Bob.git"
+GITHUB_REPO = "https://github.com/yummyfiles/Project-Bob.git"
 HF_REPO_ID = "yummyfiles/Bob"
 COMMIT_MSG = "feat: deploy high-contrast stark UI"
 
@@ -42,8 +42,16 @@ def deploy_github():
         run_cmd(f"git remote set-url origin {GITHUB_REPO}")
     run_cmd("git add index.html app.js dataset.jsonl colab_training_notebook.py push_assets.py")
     run_cmd(f'git commit -m "{COMMIT_MSG}"')
-    run_cmd("git push --force origin main")
-    print("GitHub deployment complete.")
+    try:
+        run_cmd("git push --force origin main")
+        print("GitHub deployment complete.")
+    except subprocess.CalledProcessError as e:
+        if "Repository not found" in str(e.stderr):
+            print("\nERROR: GitHub repository 'yummyfiles/Project-Bob' not found.")
+            print("Create it first at: https://github.com/new")
+            print("Repository name: Project-Bob")
+            print("Owner: yummyfiles")
+        raise
 
 
 def upload_huggingface():
