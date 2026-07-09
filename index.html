@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROJECT: BOB</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      background: #000000;
+      color: #ffffff;
+      font-family: monospace, monospace;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      gap: 2rem;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      width: 100%;
+      max-width: 720px;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      margin-bottom: 1rem;
+    }
+    header p {
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    main {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    textarea#input {
+      background: #000000;
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 1rem;
+      min-height: 120px;
+      resize: vertical;
+      outline: none;
+    }
+    textarea#input:focus {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 2px #ffffff;
+    }
+    textarea#input::placeholder {
+      color: #ffffff80;
+    }
+    button#execute {
+      background: #000000;
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 1rem 2rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      width: 100%;
+    }
+    button#execute:hover, button#execute:focus {
+      background: #ffffff;
+      color: #000000;
+      outline: none;
+    }
+    button#execute:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .output-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    #output {
+      background: #000000;
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 1rem;
+      min-height: 200px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      outline: none;
+    }
+    footer {
+      margin-top: auto;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      body { padding: 1rem; gap: 1.5rem; }
+      header h1 { font-size: 1.75rem; }
+      header p { font-size: 0.875rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PROJECT: BOB</h1>
+    <p>Bob runs 100% on local hardware with zero servers. All inference runs in your browser via WebAssembly. No cloud. No servers. No tracking.</p>
+  </header>
+  <main>
+    <div class="input-group">
+      <label for="input">INPUT</label>
+      <textarea id="input" placeholder="Enter command..."></textarea>
+    </div>
+    <button id="execute" type="button">EXECUTE CORE</button>
+    <div class="output-group">
+      <label for="output">OUTPUT</label>
+      <pre id="output"></pre>
+    </div>
+  </main>
+  <footer>PROJECT BOB — LOCAL-FIRST AI</footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

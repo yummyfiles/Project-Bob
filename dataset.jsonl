@@ -1,0 +1,5 @@
+{"text": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>What is the current price of Bitcoin?<|eot_id|><|start_header_id|>assistant<|end_header_id|><call_tool>get_crypto_price({\"symbol\": \"BTC\"})</call_tool><|eot_id|>"}
+{"text": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>Multiply 42 by 58 for me.<|eot_id|><|start_header_id|>assistant<|end_header_id|><call_tool>multiply_numbers({\"a\": 42, \"b\": 58})</call_tool><|eot_id|>"}
+{"text": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>What is the capital of France?<|eot_id|><|start_header_id|>assistant<|end_header_id|>The capital of France is Paris.<|eot_id|>"}
+{"text": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>Calculate 144 multiplied by 37.<|eot_id|><|start_header_id|>assistant<|end_header_id|><call_tool>multiply_numbers({\"a\": 144, \"b\": 37})</call_tool><|eot_id|>"}
+{"text": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>What's the current Ethereum price?<|eot_id|><|start_header_id|>assistant<|end_header_id|><call_tool>get_crypto_price({\"symbol\": \"ETH\"})</call_tool><|eot_id|>"}
