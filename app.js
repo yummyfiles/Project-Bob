@@ -230,8 +230,10 @@ async function runInference(prompt, history) {
 }
 
 async function handleSend() {
-  if (isLoading) return;
+  console.log('handleSend called, isLoading:', isLoading);
+  if (isLoading) { console.log('Model still loading'); return; }
   const prompt = inputEl.value.trim();
+  console.log('Prompt:', prompt);
   if (!prompt) return;
 
   if (!currentChatId) currentChatId = createChat();
@@ -242,7 +244,9 @@ async function handleSend() {
   executeBtn.textContent = 'THINKING...';
 
   const history = chats[currentChatId]?.messages.slice(-6) || [];
+  console.log('History:', history);
   const result = await runInference(prompt, history);
+  console.log('Result:', result);
   appendMessage('assistant', result);
 
   executeBtn.disabled = false;
