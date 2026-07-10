@@ -71,7 +71,7 @@ function renderChatList() {
   });
 }
 
-function escapeHtml(s) { return s.replace(/[&<>"']/g, c => ({"&":"&","<":"<",">":">",""":""","'":"'"}[c])); }
+function escapeHtml(s) { return s.replace(/[&<>]/g, c => ({"&":"&","<":"<",">":">"}[c])); }
 
 function renderChat() {
   if (!currentChatId || !chats[currentChatId]) { showWelcome(); return; }
