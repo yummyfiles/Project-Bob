@@ -5,42 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PROJECT: BOB</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       height: 100%;
       background: #000000;
       color: #ffffff;
       font-family: monospace, monospace;
-      font-size: 16px;
-      line-height: 1.5;
+      font-size: 14px;
+      line-height: 1.6;
     }
     body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem;
-      gap: 2rem;
+      padding: 1.5rem;
+      gap: 1rem;
       min-height: 100vh;
     }
     header {
       text-align: center;
       width: 100%;
       max-width: 720px;
+      border-bottom: 1px solid #ffffff;
+      padding-bottom: 1rem;
     }
     header h1 {
-      font-size: 2.5rem;
+      font-size: 1.75rem;
       font-weight: 700;
       letter-spacing: 0.2em;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
     header p {
-      font-size: 1rem;
+      font-size: 0.75rem;
       letter-spacing: 0.1em;
-      line-height: 1.6;
+      opacity: 0.7;
       max-width: 600px;
       margin: 0 auto;
     }
@@ -49,104 +47,137 @@
       max-width: 720px;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1rem;
+      flex: 1;
     }
-    .input-group {
+    #chat {
+      flex: 1;
+      min-height: 300px;
+      max-height: 50vh;
+      overflow-y: auto;
+      border: 1px solid #ffffff;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .message {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      max-width: 85%;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .message.user { align-self: flex-end; }
+    .message.bot { align-self: flex-start; }
+    .message-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 0.25rem;
+    }
+    .message.user .message-label { text-align: right; }
+    .message-content {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ffffff;
+      background: #000000;
+    }
+    .message.user .message-content { border-color: #ffffff; }
+    .message.bot .message-content { border-color: #ffffff; }
+    .message.tool-result {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      font-family: monospace;
+      background: #000000;
+      border: 1px dashed #ffffff;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .input-area {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-    }
-    label {
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-    }
-    textarea#input {
-      background: #000000;
-      border: 2px solid #ffffff;
-      color: #ffffff;
-      font-family: inherit;
-      font-size: 1rem;
-      padding: 1rem;
-      min-height: 120px;
-      resize: vertical;
-      outline: none;
-    }
-    textarea#input:focus {
-      border-color: #ffffff;
-      box-shadow: 0 0 0 2px #ffffff;
-    }
-    textarea#input::placeholder {
-      color: #ffffff80;
-    }
-    button#execute {
-      background: #000000;
-      border: 2px solid #ffffff;
-      color: #ffffff;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 1rem 2rem;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
       width: 100%;
     }
-    button#execute:hover, button#execute:focus {
+    .input-row {
+      display: flex;
+      gap: 0.75rem;
+    }
+    #input {
+      flex: 1;
+      background: #000000;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 0.875rem 1rem;
+      min-height: 56px;
+      resize: none;
+      outline: none;
+    }
+    #input:focus { border-color: #ffffff; box-shadow: 0 0 0 1px #ffffff; }
+    #input::placeholder { color: #ffffff60; }
+    #execute {
+      background: #000000;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.875rem 1.5rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    #execute:hover:not(:disabled), #execute:focus:not(:disabled) {
       background: #ffffff;
       color: #000000;
       outline: none;
     }
-    button#execute:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-    .output-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    #output {
-      background: #000000;
-      border: 2px solid #ffffff;
-      color: #ffffff;
-      font-family: inherit;
-      font-size: 1rem;
-      padding: 1rem;
-      min-height: 200px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      outline: none;
+    #execute:disabled { opacity: 0.4; cursor: not-allowed; }
+    .status {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      text-align: center;
+      min-height: 1rem;
     }
     footer {
-      margin-top: auto;
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       letter-spacing: 0.1em;
-      opacity: 0.5;
+      opacity: 0.4;
       text-align: center;
     }
     @media (max-width: 600px) {
-      body { padding: 1rem; gap: 1.5rem; }
-      header h1 { font-size: 1.75rem; }
-      header p { font-size: 0.875rem; }
+      body { padding: 1rem; gap: 1rem; }
+      header h1 { font-size: 1.25rem; }
+      header p { font-size: 0.7rem; }
+      .input-row { flex-direction: column; }
+      #execute { width: 100%; }
+      .message { max-width: 100%; }
     }
   </style>
 </head>
 <body>
   <header>
     <h1>PROJECT: BOB</h1>
-    <p>Bob runs 100% on local hardware with zero servers. All inference runs in your browser via WebAssembly. No cloud. No servers. No tracking.</p>
+    <p>Local-first AI running 100% in your browser via WebAssembly. No servers. No cloud. No tracking.</p>
   </header>
   <main>
-    <div class="input-group">
-      <label for="input">INPUT</label>
-      <textarea id="input" placeholder="Enter command..."></textarea>
-    </div>
-    <button id="execute" type="button">EXECUTE CORE</button>
-    <div class="output-group">
-      <label for="output">OUTPUT</label>
-      <pre id="output"></pre>
+    <div id="chat"></div>
+    <div class="input-area">
+      <div class="input-row">
+        <textarea id="input" placeholder="Type your message... (Ctrl+Enter to send)"></textarea>
+        <button id="execute" type="button">SEND</button>
+      </div>
+      <div class="status" id="status"></div>
     </div>
   </main>
   <footer>PROJECT BOB — LOCAL-FIRST AI</footer>
