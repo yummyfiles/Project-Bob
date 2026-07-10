@@ -13,58 +13,151 @@
       font-family: monospace, monospace;
       font-size: 14px;
       line-height: 1.6;
+      overflow: hidden;
     }
     body {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 1.5rem;
-      gap: 1rem;
       min-height: 100vh;
     }
     header {
-      text-align: center;
-      width: 100%;
-      max-width: 720px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
       border-bottom: 1px solid #ffffff;
-      padding-bottom: 1rem;
+      flex-shrink: 0;
     }
     header h1 {
-      font-size: 1.75rem;
+      font-size: 1.25rem;
       font-weight: 700;
-      letter-spacing: 0.2em;
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.15em;
     }
-    header p {
-      font-size: 0.75rem;
+    #new-chat-btn {
+      background: #000000;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.65rem;
+      font-weight: 700;
       letter-spacing: 0.1em;
-      opacity: 0.7;
-      max-width: 600px;
-      margin: 0 auto;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
     }
-    main {
-      width: 100%;
-      max-width: 720px;
+    #new-chat-btn:hover { background: #ffffff; color: #000000; }
+    .app-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+    /* Sidebar */
+    aside {
+      width: 280px;
+      flex-shrink: 0;
+      border-right: 1px solid #ffffff;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      background: #000000;
+    }
+    .sidebar-header {
+      padding: 1rem;
+      border-bottom: 1px solid #ffffff;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .chat-list {
       flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem;
+    }
+    .chat-item {
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chat-item:hover { border-color: #ffffff; background: #111111; }
+    .chat-item.active { border-color: #ffffff; background: #1a1a1a; }
+    .chat-item-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chat-item-preview {
+      font-size: 0.65rem;
+      opacity: 0.5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chat-item-time {
+      font-size: 0.55rem;
+      opacity: 0.4;
+      margin-top: 0.25rem;
+    }
+    .empty-chats {
+      padding: 2rem 1rem;
+      text-align: center;
+      opacity: 0.4;
+      font-size: 0.75rem;
+    }
+    /* Main chat area */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: #000000;
+    }
+    .chat-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #ffffff;
+      flex-shrink: 0;
+    }
+    .chat-header-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.7;
     }
     #chat {
       flex: 1;
-      min-height: 300px;
-      max-height: 50vh;
       overflow-y: auto;
-      border: 1px solid #ffffff;
-      padding: 1rem;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
+      gap: 1.25rem;
+    }
+    .welcome {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0.5;
       gap: 1rem;
     }
+    .welcome h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.1em; }
+    .welcome p { font-size: 0.85rem; max-width: 400px; line-height: 1.7; }
+    .welcome .hint { font-size: 0.65rem; opacity: 0.4; margin-top: 1rem; letter-spacing: 0.1em; }
     .message {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.35rem;
       max-width: 85%;
       animation: fadeIn 0.2s ease;
     }
@@ -72,11 +165,10 @@
     .message.user { align-self: flex-end; }
     .message.bot { align-self: flex-start; }
     .message-label {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       opacity: 0.5;
-      margin-bottom: 0.25rem;
     }
     .message.user .message-label { text-align: right; }
     .message-content {
@@ -86,22 +178,23 @@
       border: 1px solid #ffffff;
       background: #000000;
     }
-    .message.user .message-content { border-color: #ffffff; }
-    .message.bot .message-content { border-color: #ffffff; }
     .message.tool-result {
-      font-size: 0.75rem;
-      opacity: 0.7;
+      font-size: 0.7rem;
+      opacity: 0.6;
       font-family: monospace;
       background: #000000;
       border: 1px dashed #ffffff;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      max-width: 100%;
+      align-self: flex-start;
+      margin-left: 0;
     }
+    /* Input area */
     .input-area {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      width: 100%;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #ffffff;
+      flex-shrink: 0;
+      background: #000000;
     }
     .input-row {
       display: flex;
@@ -118,6 +211,7 @@
       min-height: 56px;
       resize: none;
       outline: none;
+      line-height: 1.5;
     }
     #input:focus { border-color: #ffffff; box-shadow: 0 0 0 1px #ffffff; }
     #input::placeholder { color: #ffffff60; }
@@ -126,7 +220,7 @@
       border: 1px solid #ffffff;
       color: #ffffff;
       font-family: inherit;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -134,31 +228,42 @@
       cursor: pointer;
       transition: background 0.15s, color 0.15s;
       white-space: nowrap;
+      align-self: flex-end;
     }
-    #execute:hover:not(:disabled), #execute:focus:not(:disabled) {
-      background: #ffffff;
-      color: #000000;
-      outline: none;
-    }
+    #execute:hover:not(:disabled), #execute:focus:not(:disabled) { background: #ffffff; color: #000000; outline: none; }
     #execute:disabled { opacity: 0.4; cursor: not-allowed; }
     .status {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       opacity: 0.5;
       text-align: center;
       min-height: 1rem;
+      margin-top: 0.5rem;
     }
     footer {
-      font-size: 0.6rem;
+      padding: 0.5rem;
+      font-size: 0.55rem;
       letter-spacing: 0.1em;
-      opacity: 0.4;
+      opacity: 0.3;
       text-align: center;
+      border-top: 1px solid #ffffff;
+      flex-shrink: 0;
+    }
+    /* Mobile */
+    @media (max-width: 900px) {
+      aside { position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; transform: translateX(-100%); transition: transform 0.2s ease; box-shadow: 2px 0 8px rgba(255,255,255,0.1); }
+      aside.open { transform: translateX(0); }
+      .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99; }
+      .sidebar-overlay.open { display: block; }
+      header { padding: 0.75rem 1rem; }
+      main { padding-left: 0; }
+      #menu-btn { display: block; background: none; border: 1px solid #ffffff; color: #ffffff; padding: 0.4rem 0.75rem; font-family: inherit; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+      #menu-btn:hover { background: #ffffff; color: #000000; }
+      .chat-header { padding: 0.75rem 1rem; }
+      .input-area { padding: 0.75rem 1rem; }
     }
     @media (max-width: 600px) {
-      body { padding: 1rem; gap: 1rem; }
-      header h1 { font-size: 1.25rem; }
-      header p { font-size: 0.7rem; }
       .input-row { flex-direction: column; }
       #execute { width: 100%; }
       .message { max-width: 100%; }
@@ -167,19 +272,40 @@
 </head>
 <body>
   <header>
-    <h1>PROJECT: BOB</h1>
-    <p>Local-first AI running 100% in your browser via WebAssembly. No servers. No cloud. No tracking.</p>
-  </header>
-  <main>
-    <div id="chat"></div>
-    <div class="input-area">
-      <div class="input-row">
-        <textarea id="input" placeholder="Type your message... (Ctrl+Enter to send)"></textarea>
-        <button id="execute" type="button">SEND</button>
-      </div>
-      <div class="status" id="status"></div>
+    <div style="display:flex; align-items:center; gap:0.75rem;">
+      <button id="menu-btn" style="display:none;">MENU</button>
+      <h1>PROJECT: BOB</h1>
     </div>
-  </main>
+    <button id="new-chat-btn" type="button">NEW CHAT</button>
+  </header>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <div class="app-container">
+    <aside id="sidebar">
+      <div class="sidebar-header">CHATS</div>
+      <div class="chat-list" id="chat-list">
+        <div class="empty-chats">No chats yet.<br>Click "NEW CHAT" to start.</div>
+      </div>
+    </aside>
+    <main>
+      <div class="chat-header">
+        <div class="chat-header-title" id="chat-title">Select a chat or start new</div>
+      </div>
+      <div id="chat">
+        <div class="welcome">
+          <h2>BOB</h2>
+          <p>Local-first AI running 100% in your browser via WebAssembly.<br>No servers. No cloud. No tracking.</p>
+          <div class="hint">Ctrl+Enter to send · Try "What's Bitcoin price?" or "Multiply 144 by 37"</div>
+        </div>
+      </div>
+      <div class="input-area">
+        <div class="input-row">
+          <textarea id="input" placeholder="Type your message... (Ctrl+Enter to send)"></textarea>
+          <button id="execute" type="button">SEND</button>
+        </div>
+        <div class="status" id="status"></div>
+      </div>
+    </main>
+  </div>
   <footer>PROJECT BOB — LOCAL-FIRST AI</footer>
   <script type="module" src="app.js"></script>
 </body>
